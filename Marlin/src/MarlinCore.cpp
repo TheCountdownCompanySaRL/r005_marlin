@@ -256,6 +256,11 @@
   #include "tests/marlin_tests.h"
 #endif
 
+#if ENABLED(LC_FEATURE)
+  #include "feature/loadcell/loadcell.h"
+  #warning "EXPERIMENTAL LOADCELL IMPLEMENTATION"
+#endif
+
 PGMSTR(M112_KILL_STR, "M112 Shutdown");
 
 MarlinState marlin_state = MF_INITIALIZING;
@@ -796,6 +801,11 @@ void idle(const bool no_stepper_sleep/*=false*/) {
   // Manage Heaters (and Watchdog)
   thermalManager.task();
 
+  // Manage Loadcell if enabled
+  #if ENABLED(LC_FEATURE) 
+    // Keep loadcell active
+  #endif
+
   // Max7219 heartbeat, animation, etc
   TERN_(MAX7219_DEBUG, max7219.idle_tasks());
 
@@ -1184,7 +1194,10 @@ void setup() {
       while (!MYSERIAL3.connected() && PENDING(millis(), serial_connect_timeout)) { /*nada*/ }
     #endif
   #endif
+
+  #ifndef NO_SERIAL_BOOT
   SERIAL_ECHOLNPGM("start");
+  #endif
 
   // Set up these pins early to prevent suicide
   #if HAS_KILL
@@ -1276,6 +1289,10 @@ void setup() {
     SETUP_RUN(esp_wifi_init());
   #endif
 
+  #if ENABLED(LC_FEATURE)
+    SERIAL_ECHOLNPGM("Loadcells features Enabled");
+  #endif
+
   // Report Reset Reason
   if (mcu & RST_POWER_ON)  SERIAL_ECHOLNPGM(STR_POWERUP);
   if (mcu & RST_EXTERNAL)  SERIAL_ECHOLNPGM(STR_EXTERNAL_RESET);
@@ -1284,6 +1301,7 @@ void setup() {
   if (mcu & RST_SOFTWARE)  SERIAL_ECHOLNPGM(STR_SOFTWARE_RESET);
 
   // Identify myself as Marlin x.x.x
+  #ifndef NO_SERIAL_BOOT
   SERIAL_ECHOLNPGM("Marlin " SHORT_BUILD_VERSION);
   #if defined(STRING_DISTRIBUTION_DATE) && defined(STRING_CONFIG_H_AUTHOR)
     SERIAL_ECHO_MSG(
@@ -1293,6 +1311,7 @@ void setup() {
   #endif
   SERIAL_ECHO_MSG(" Compiled: " __DATE__);
   SERIAL_ECHO_MSG(STR_FREE_MEMORY, hal.freeMemory(), STR_PLANNER_BUFFER_BYTES, sizeof(block_t) * (BLOCK_BUFFER_SIZE));
+  #endif
 
   // Some HAL need precise delay adjustment
   calibrate_delay_loop();
@@ -1309,6 +1328,11 @@ void setup() {
 
   #if ENABLED(NEOPIXEL2_SEPARATE)
     SETUP_RUN(leds2.setup());
+  #endif
+
+  // set up loadcells
+  #if ENABLED(LC_FEATURE)
+    lc_init();
   #endif
 
   #if ENABLED(USE_CONTROLLER_FAN)     // Set up fan controller to initialize also the default configurations.

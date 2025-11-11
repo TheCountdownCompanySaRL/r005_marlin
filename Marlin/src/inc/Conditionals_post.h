@@ -2831,6 +2831,15 @@
   #define HAS_FILAMENT_WIDTH_SENSOR 1
 #endif
 
+// Loadcell
+#if ENABLED(LC_FEATURE)
+  #define HAS_LOADCELL 1
+#else
+  #define HAS_LOADCELL 0
+  #warning "HAS_LOADCELL for loadcell feature not set to true"
+#endif
+
+
 // User Interface
 #if ENABLED(FREEZE_FEATURE) && !PIN_EXISTS(FREEZE) && PIN_EXISTS(KILL)
   #define FREEZE_PIN KILL_PIN

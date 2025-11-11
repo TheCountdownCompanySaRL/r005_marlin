@@ -126,6 +126,9 @@ enum ADCSensorState : char {
   #if HAS_ADC_BUTTONS
     Prepare_ADC_KEY, Measure_ADC_KEY,
   #endif
+  #if HAS_LOADCELL
+    Prepare_comp_ADC,Measure_comp_ADC,Prepare_tens_ADC,Measure_tens_ADC,
+  #endif
   SensorsReady, // Temperatures ready. Delay the next round of readings to let ADC pins settle.
   StartupDelay  // Startup, delay initial temp reading a tiny bit so the hardware can settle
 };
@@ -598,6 +601,8 @@ class Temperature {
     #if HAS_TEMP_REDUNDANT
       static redundant_info_t temp_redundant;
     #endif
+
+    // loadcell custom functionality in features
 
     #if EITHER(AUTO_POWER_E_FANS, HAS_FANCHECK)
       static uint8_t autofan_speed[HOTENDS];

@@ -79,6 +79,10 @@
   #include "../../feature/mixing.h"
 #endif
 
+#if ENABLED(LC_FEATURE)
+  #include "../../feature/loadcell/loadcell.h"
+#endif
+
 #define X_LABEL_POS      3
 #define X_VALUE_POS     11
 #define XYZ_SPACING     37
@@ -703,6 +707,37 @@ void MarlinUI::draw_status_screen() {
 
     // Flowmeter
     TERN_(DO_DRAW_AMMETER, _draw_ammeter_status());
+
+    // loadcell
+    #if HAS_LOADCELL
+      // draw 16x16 compression loadcell icon
+      u8g.drawBitmapP(
+        STATUS_COMP_LC_X, STATUS_COMP_LC_Y,
+        STATUS_COMP_LC_BYTEWIDTH, STATUS_COMP_LC_WIDTH,
+        comp_lc_bmp
+      );
+
+      // draw value next to icon
+      const char *valc = ftostr31sign(compSensor.getForce());
+      int lenc = strlen(valc);
+      lcd_put_u8str(STATUS_COMP_LC_TEXT_X - ((lenc + 1)/2 * 6), STATUS_COMP_LC_TEXT_Y, valc);
+      // unit "N"
+      lcd_put_u8str(STATUS_COMP_LC_TEXT_X + (lenc * 6) - ((lenc + 1)/2 * 6), STATUS_COMP_LC_TEXT_Y, "N");
+
+      // draw 16x16 tension loadcell icon
+      u8g.drawBitmapP(
+        STATUS_TENS_LC_X, STATUS_TENS_LC_Y,
+        STATUS_TENS_LC_BYTEWIDTH, STATUS_TENS_LC_WIDTH,
+        tens_lc_bmp
+      );
+
+      // draw value next to icon
+      const char *valt = ftostr31sign(tensSensor.getForce());
+      int lent = strlen(valt);
+      lcd_put_u8str(STATUS_TENS_LC_TEXT_X - ((lent + 1)/2 * 6), STATUS_TENS_LC_TEXT_Y, valt);
+      // unit "N"
+      lcd_put_u8str(STATUS_TENS_LC_TEXT_X + (lent * 6) - ((lent + 1)/2 * 6), STATUS_TENS_LC_TEXT_Y, "N");
+    #endif
 
     // Fan, if a bitmap was provided
     #if DO_DRAW_FAN

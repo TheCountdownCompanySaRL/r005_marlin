@@ -170,6 +170,13 @@
 #define _EXTRA_WIDTH (STATUS_FAN_WIDTH + STATUS_CHAMBER_WIDTH + STATUS_BED_WIDTH)
 
 //
+// Default loadcell sensor bitmap
+//
+#if ENABLED(LC_FEATURE)
+  #include "status/loadcell.h"
+#endif
+
+//
 // Heater Bitmap X Space Requirements
 //
 #if !defined(STATUS_HEATERS_XSPACE) && (STATUS_HOTEND1_WIDTH || STATUS_HEATERS_WIDTH)
@@ -678,6 +685,59 @@
     );
   #endif
 #endif
+
+//
+// Compaction loadcell icon and reading
+//
+#if HAS_LOADCELL && STATUS_COMP_LC_WIDTH
+  #ifndef STATUS_COMP_LC_BYTEWIDTH
+    #define STATUS_COMP_LC_BYTEWIDTH BW(STATUS_COMP_LC_WIDTH)
+  #endif
+
+  #ifndef STATUS_COMP_LC_X
+    #define STATUS_COMP_LC_X (STATUS_HOTEND_X(0) + 37)
+  #endif
+
+  #ifndef STATUS_COMP_LC_Y
+    #define STATUS_COMP_LC_Y (STATUS_HEATERS_Y - 2)
+  #endif
+
+  // Text right under the icon
+  #ifndef STATUS_COMP_LC_TEXT_X
+    #define STATUS_COMP_LC_TEXT_X (STATUS_COMP_LC_X + 6)
+  #endif
+
+  #ifndef STATUS_COMP_LC_TEXT_Y
+    #define STATUS_COMP_LC_TEXT_Y (STATUS_COMP_LC_Y + 22)
+  #endif
+#endif
+
+//
+// tension loadcell icon and reading
+//
+#if HAS_LOADCELL && STATUS_TENS_LC_WIDTH
+  #ifndef STATUS_TENS_LC_BYTEWIDTH
+    #define STATUS_TENS_LC_BYTEWIDTH BW(STATUS_TENS_LC_WIDTH)
+  #endif
+
+  #ifndef STATUS_TENS_LC_X
+    #define STATUS_TENS_LC_X (STATUS_COMP_LC_X + 37)
+  #endif
+
+  #ifndef STATUS_TENS_LC_Y
+    #define STATUS_TENS_LC_Y (STATUS_HEATERS_Y - 2)
+  #endif
+
+  // Text right under the icon
+  #ifndef STATUS_TENS_LC_TEXT_X
+    #define STATUS_TENS_LC_TEXT_X (STATUS_TENS_LC_X + 6)
+  #endif
+
+  #ifndef STATUS_TENS_LC_TEXT_Y
+    #define STATUS_TENS_LC_TEXT_Y (STATUS_TENS_LC_Y + 22)
+  #endif
+#endif
+
 
 //
 // Fan Bitmap Properties

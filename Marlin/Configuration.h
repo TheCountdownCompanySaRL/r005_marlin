@@ -60,8 +60,9 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "(none, default config)" // Who made the changes.
-//#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
+#define STRING_CONFIG_H_AUTHOR "The CountDown Compagny" // Who made the changes.
+#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
+#define NO_SERIAL_BOOT
 
 /**
  * *** VENDORS PLEASE READ ***
@@ -78,7 +79,7 @@
 #define SHOW_BOOTSCREEN
 
 // Show the bitmap in Marlin/_Bootscreen.h on startup.
-//#define SHOW_CUSTOM_BOOTSCREEN
+#define SHOW_CUSTOM_BOOTSCREEN
 
 // Show the bitmap in Marlin/_Statusscreen.h on the status screen.
 //#define CUSTOM_STATUS_SCREEN_IMAGE
@@ -88,6 +89,7 @@
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
   #define MOTHERBOARD BOARD_RAMPS_14_EFF
+  //#define MOTHERBOARD BOARD_RAMPS_DUO_EFF
 #endif
 
 /**
@@ -2181,7 +2183,7 @@
  *   M502 - Revert settings to "factory" defaults. (Follow with M500 to init the EEPROM.)
  */
 //#define EEPROM_SETTINGS     // Persistent storage with M500 and M501
-//#define DISABLE_M503        // Saves ~2700 bytes of flash. Disable for release!
+#define DISABLE_M503        // Saves ~2700 bytes of flash. Disable for release!
 #define EEPROM_CHITCHAT       // Give feedback on EEPROM commands. Disable to save PROGMEM.
 #define EEPROM_BOOT_SILENT    // Keep M503 quiet and only give errors during first load
 #if ENABLED(EEPROM_SETTINGS)

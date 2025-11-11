@@ -30,6 +30,7 @@
  *
  * Basic settings can be found in Configuration.h
  */
+
 #define CONFIGURATION_ADV_H_VERSION 02010201
 
 // @section develop
@@ -49,6 +50,12 @@
  *  4 = schema.yml - The entire configuration schema.
  */
 //#define CONFIG_EXPORT 2 // :[1:'JSON', 2:'config.ini', 3:'schema.json', 4:'schema.yml']
+
+//===========================================================================
+//============================= Custom Settings =============================
+//===========================================================================
+
+#define LC_FEATURE
 
 //===========================================================================
 //============================= Thermal Settings ============================
@@ -1479,7 +1486,7 @@
 #endif // HAS_DISPLAY || DWIN_LCD_PROUI
 
 // Add 'M73' to set print job progress, overrides Marlin's built-in estimate
-//#define SET_PROGRESS_MANUALLY
+#define SET_PROGRESS_MANUALLY
 #if ENABLED(SET_PROGRESS_MANUALLY)
   #define SET_PROGRESS_PERCENT            // Add 'P' parameter to set percentage done
   #define SET_REMAINING_TIME              // Add 'R' parameter to set remaining time
@@ -3584,7 +3591,7 @@
  * Enables G53 and G54-G59.3 commands to select coordinate systems
  * and G92.1 to reset the workspace to native machine space.
  */
-//#define CNC_COORDINATE_SYSTEMS
+#define CNC_COORDINATE_SYSTEMS
 
 // @section reporting
 

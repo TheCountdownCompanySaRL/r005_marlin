@@ -168,6 +168,10 @@
   #include "../feature/filwidth.h"
 #endif
 
+#if ENABLED(LC_FEATURE)
+  #include "../feature/loadcell/loadcell.h"
+#endif
+
 #if HAS_POWER_MONITOR
   #include "../feature/power_monitor.h"
 #endif
@@ -2398,7 +2402,8 @@ void Temperature::updateTemperaturesFromRawValues() {
   TERN_(HAS_TEMP_PROBE,     temp_probe.celsius     = analog_to_celsius_probe(temp_probe.getraw()));
   TERN_(HAS_TEMP_BOARD,     temp_board.celsius     = analog_to_celsius_board(temp_board.getraw()));
   TERN_(HAS_TEMP_REDUNDANT, temp_redundant.celsius = analog_to_celsius_redundant(temp_redundant.getraw()));
-
+  TERN_(LC_FEATURE,         compSensor.update_newton());
+  TERN_(LC_FEATURE,         tensSensor.update_newton());
   TERN_(FILAMENT_WIDTH_SENSOR, filwidth.update_measured_mm());
   TERN_(HAS_POWER_MONITOR,     power_monitor.capture_values());
 
@@ -2690,6 +2695,8 @@ void Temperature::init() {
   TERN_(HAS_TEMP_ADC_COOLER,    hal.adc_enable(TEMP_COOLER_PIN));
   TERN_(HAS_TEMP_ADC_BOARD,     hal.adc_enable(TEMP_BOARD_PIN));
   TERN_(HAS_TEMP_ADC_REDUNDANT, hal.adc_enable(TEMP_REDUNDANT_PIN));
+  TERN_(HAS_LOADCELL,           hal.adc_enable(COMP_ADC_CH));
+  TERN_(HAS_LOADCELL,           hal.adc_enable(TENS_ADC_CH));
   TERN_(FILAMENT_WIDTH_SENSOR,  hal.adc_enable(FILWIDTH_PIN));
   TERN_(HAS_ADC_BUTTONS,        hal.adc_enable(ADC_KEYPAD_PIN));
   TERN_(POWER_MONITOR_CURRENT,  hal.adc_enable(POWER_MONITOR_CURRENT_PIN));
@@ -3894,6 +3901,23 @@ void Temperature::isr() {
         if (ADCKey_count == ADC_BUTTON_DEBOUNCE_DELAY) ADCKey_pressed = true;
         break;
     #endif // HAS_ADC_BUTTONS
+
+    #if HAS_LOADCELL
+      case Prepare_comp_ADC:
+        hal.adc_start(COMP_ADC_CH);
+        break;
+      case Measure_comp_ADC: 
+        if (!hal.adc_ready()) next_sensor_state = adc_sensor_state; // Redo this state
+        else compSensor.sample(hal.adc_value());
+        break;
+      case Prepare_tens_ADC:
+        hal.adc_start(TENS_ADC_CH);
+        break;
+      case Measure_tens_ADC: 
+        if (!hal.adc_ready()) next_sensor_state = adc_sensor_state; // Redo this state
+        else tensSensor.sample(hal.adc_value());
+        break;
+    #endif // HAS_LOADCELL
 
     case StartupDelay: break;
 

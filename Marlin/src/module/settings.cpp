@@ -3502,9 +3502,11 @@ void MarlinSettings::reset() {
   postprocess();
 
   #if EITHER(EEPROM_CHITCHAT, DEBUG_LEVELING_FEATURE)
+  #ifndef NO_SERIAL_BOOT
     FSTR_P const hdsl = F("Hardcoded Default Settings Loaded");
     TERN_(HOST_EEPROM_CHITCHAT, hostui.notify(hdsl));
     DEBUG_ECHO_START(); DEBUG_ECHOLNF(hdsl);
+  #endif
   #endif
 
   TERN_(EXTENSIBLE_UI, ExtUI::onFactoryReset());
