@@ -1051,6 +1051,8 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
 
       #if ENABLED(LC_FEATURE)
         case 950: M950(); break;                                  // M950: print loadcell values
+        case 951: M951(); break;                                  // M951: set zero value offset for loadcells
+        case 955: M955(); break;                                  // M955: write to log file
       #endif
 
       #if ENABLED(MAGNETIC_PARKING_EXTRUDER)

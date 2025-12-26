@@ -172,6 +172,10 @@
   #include "../feature/loadcell/loadcell.h"
 #endif
 
+#if ENABLED(LIN_ENC_FEATURE)
+  #include "../feature/linencoder/linencoder.h"
+#endif
+
 #if HAS_POWER_MONITOR
   #include "../feature/power_monitor.h"
 #endif
@@ -2404,6 +2408,7 @@ void Temperature::updateTemperaturesFromRawValues() {
   TERN_(HAS_TEMP_REDUNDANT, temp_redundant.celsius = analog_to_celsius_redundant(temp_redundant.getraw()));
   TERN_(LC_FEATURE,         compSensor.update_newton());
   TERN_(LC_FEATURE,         tensSensor.update_newton());
+  TERN_(LIN_ENC_FEATURE,    head_encoder.update_mm());
   TERN_(FILAMENT_WIDTH_SENSOR, filwidth.update_measured_mm());
   TERN_(HAS_POWER_MONITOR,     power_monitor.capture_values());
 
@@ -2697,6 +2702,7 @@ void Temperature::init() {
   TERN_(HAS_TEMP_ADC_REDUNDANT, hal.adc_enable(TEMP_REDUNDANT_PIN));
   TERN_(HAS_LOADCELL,           hal.adc_enable(COMP_ADC_CH));
   TERN_(HAS_LOADCELL,           hal.adc_enable(TENS_ADC_CH));
+  TERN_(HAS_LIN_ENC,            hal.adc_enable(LIN_ENC_ADC_CH))
   TERN_(FILAMENT_WIDTH_SENSOR,  hal.adc_enable(FILWIDTH_PIN));
   TERN_(HAS_ADC_BUTTONS,        hal.adc_enable(ADC_KEYPAD_PIN));
   TERN_(POWER_MONITOR_CURRENT,  hal.adc_enable(POWER_MONITOR_CURRENT_PIN));
@@ -3918,6 +3924,16 @@ void Temperature::isr() {
         else tensSensor.sample(hal.adc_value());
         break;
     #endif // HAS_LOADCELL
+
+    #if HAS_LIN_ENC
+      case Prepare_lin_enc_ADC:
+        hal.adc_start(LIN_ENC_ADC_CH);
+        break;
+      case Measure_lin_enc_ADC:
+        if (!hal.adc_ready()) next_sensor_state = adc_sensor_state; // Redo this state
+        else head_encoder.sample(hal.adc_value());
+        break;
+    #endif // HAS_LIN_ENC
 
     case StartupDelay: break;
 

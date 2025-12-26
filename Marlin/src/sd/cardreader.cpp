@@ -737,6 +737,47 @@ void CardReader::openFileWrite(const char * const path) {
   openFailed(fname);
 }
 
+void CardReader::openFileAppend(const char * const path, bool silent = true) {
+  if (!isMounted()) return;
+
+  if(!silent) announceOpen(2, path);
+  TERN_(HAS_MEDIA_SUBCALLS, file_subcall_ctr = 0);
+
+  abortFilePrintNow();
+
+  MediaFile *diveDir;
+  const char * const fname = diveToFile(false, diveDir, path);
+  if (!fname) return openFailed(path);
+
+  #if DISABLED(SDCARD_READONLY)
+    #if ENABLED(MARLIN_FATFS)
+      // --- FatFs version ---
+      if (file.open(diveDir, fname, FA_OPEN_ALWAYS | FA_WRITE)) {
+        // Move to end so next write appends
+        file.lseek(file.fsize());
+        flag.saving = true;
+        selectFileByName(fname);
+        TERN_(EMERGENCY_PARSER, emergency_parser.disable());
+        if(!silent) echo_write_to_file(fname);
+        ui.set_status(fname);
+        return;
+      }
+    #else
+      // --- SdFat version ---
+      if (file.open(diveDir, fname, O_WRITE | O_CREAT | O_AT_END)) {
+        flag.saving = true;
+        selectFileByName(fname);
+        TERN_(EMERGENCY_PARSER, emergency_parser.disable());
+        if(!silent) echo_write_to_file(fname);
+        ui.set_status(fname);
+        return;
+      }
+    #endif
+  #endif
+
+  openFailed(fname);
+}
+
 //
 // Check if a file exists by absolute or workDir-relative path
 // If the file exists, the long name can also be fetched.
@@ -810,8 +851,24 @@ void CardReader::write_command(char * const buf) {
   }
   end[1] = '\r';
   end[2] = '\n';
-  end[3] = '\0';
+  //end[3] = '\0';
   file.write(begin);
+
+  if (file.writeError) SERIAL_ERROR_MSG(STR_SD_ERR_WRITE_TO_FILE);
+}
+
+void CardReader::append(char *buf, uint16_t len) {
+  file.writeError = false;
+
+  // move to end so we append
+  #if ENABLED(MARLIN_FATFS)
+    file.seek(file.get_size());
+  #else
+    file.seekEnd();
+  #endif
+
+  if (buf && len) file.write((const uint8_t*)buf, len);
+  file.write("\r\n", 2);
 
   if (file.writeError) SERIAL_ERROR_MSG(STR_SD_ERR_WRITE_TO_FILE);
 }

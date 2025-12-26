@@ -128,6 +128,7 @@ public:
   // SD Card Logging
   static void openLogFile(const char * const path);
   static void write_command(char * const buf);
+  static void append(char * const buf, uint16_t len);
 
   #if DISABLED(NO_SD_AUTOSTART)     // Auto-Start auto#.g file handling
     static uint8_t autofile_index;  // Next auto#.g index to run, plus one. Ignored by autofile_check when zero.
@@ -139,6 +140,7 @@ public:
   // Basic file ops
   static void openFileRead(const char * const path, const uint8_t subcall=0);
   static void openFileWrite(const char * const path);
+  void openFileAppend(const char * const path, bool silent);
   static void closefile(const bool store_location=false);
   static bool fileExists(const char * const name);
   static void removeFile(const char * const name);

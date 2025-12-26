@@ -2839,6 +2839,14 @@
   #warning "HAS_LOADCELL for loadcell feature not set to true"
 #endif
 
+// linear encoder
+#if ENABLED(LIN_ENC_FEATURE)
+  #define HAS_LIN_ENC 1
+#else
+  #define HAS_LIN_ENC 0
+  #warning "HAS_LIN_ENC for linear encoder feature not set to true"
+#endif
+
 
 // User Interface
 #if ENABLED(FREEZE_FEATURE) && !PIN_EXISTS(FREEZE) && PIN_EXISTS(KILL)

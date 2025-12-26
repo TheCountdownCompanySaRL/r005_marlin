@@ -57,6 +57,8 @@
 
 #define LC_FEATURE
 
+#define LIN_ENC_FEATURE
+
 //===========================================================================
 //============================= Thermal Settings ============================
 //===========================================================================
@@ -3612,7 +3614,7 @@
 /**
  * Auto-report position with M154 S<seconds>
  */
-//#define AUTO_REPORT_POSITION
+#define AUTO_REPORT_POSITION
 
 /**
  * Include capabilities in M115 output
@@ -3665,7 +3667,7 @@
 
 // Extra options for the M114 "Current Position" report
 //#define M114_DETAIL         // Use 'M114` for details to check planner calculations
-//#define M114_REALTIME       // Real current position based on forward kinematics
+#define M114_REALTIME       // Real current position based on forward kinematics
 //#define M114_LEGACY         // M114 used to synchronize on every call. Enable if needed.
 
 //#define REPORT_FAN_CHANGE   // Report the new fan speed when changed by M106 (and others)
@@ -3773,6 +3775,10 @@
   #define MAIN_MENU_ITEM_6_DESC "Cut filament"
   #define MAIN_MENU_ITEM_6_GCODE "M280 P0 S90\n G91\n G1 E-1 F9000\n G90\n M280 P0 S130\n G92 E-70\n M84"
   //#define MAIN_MENU_ITEM_6_CONFIRM
+
+  #define MAIN_MENU_ITEM_7_DESC "Calibrate loadcells"
+  #define MAIN_MENU_ITEM_7_GCODE "M951"
+  //#define MAIN_MENU_ITEM_7_CONFIRM
 #endif
 
 // @section custom config menu
@@ -4224,7 +4230,7 @@
 //
 // M42 - Set pin states
 //
-//#define DIRECT_PIN_CONTROL
+#define DIRECT_PIN_CONTROL
 
 //
 // M43 - display pin status, toggle pins, watch pins, watch endstops & toggle LED, test servo probe

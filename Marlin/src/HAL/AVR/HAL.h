@@ -144,6 +144,12 @@ typedef Servo hal_servo_t;
   #endif
 #endif
 
+#ifdef RPI_SERIAL_PORT
+  #if !WITHIN(LCD_SERIAL_PORT, 0, 3)
+    #error "LCD_SERIAL_PORT must be from 0 to 3."
+  #endif
+#endif
+
 //
 // ADC
 //

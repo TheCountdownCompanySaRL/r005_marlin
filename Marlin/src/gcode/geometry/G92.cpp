@@ -128,5 +128,5 @@ void GcodeSuite::G92() {
     else if (sync_E) sync_plan_position_e();
   #endif
 
-  IF_DISABLED(DIRECT_STEPPING, report_current_position());
+  //IF_DISABLED(DIRECT_STEPPING, report_current_position());
 }
