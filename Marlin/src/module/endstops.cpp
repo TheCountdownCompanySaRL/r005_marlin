@@ -109,6 +109,7 @@ Endstops::endstop_mask_t Endstops::live_state = 0;
 
 void Endstops::init() {
 
+  #ifndef NO_ENDSTOPS
   #if HAS_X_MIN
     #if ENABLED(ENDSTOPPULLUP_XMIN)
       SET_INPUT_PULLUP(X_MIN_PIN);
@@ -408,6 +409,7 @@ void Endstops::init() {
       SET_INPUT(Z_MIN_PROBE_PIN);
     #endif
   #endif
+  #endif //NO_ENDSTOPS
 
   #if ENABLED(PROBE_ACTIVATION_SWITCH)
     SET_INPUT(PROBE_ACTIVATION_SWITCH_PIN);

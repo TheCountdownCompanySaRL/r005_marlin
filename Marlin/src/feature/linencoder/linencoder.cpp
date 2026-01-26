@@ -25,10 +25,8 @@
             this->sample_count = 0;
         }
    
-        // Convert raw ADC value to force in Newtons
-        // map raw from 0 to 1023 to -9.81 to +9.81 N
-        this->pos_mm = (this->raw*19.62/1023.0)-9.81;
-        //SERIAL_ECHOLNPGM("LC raw: ",raw," Force[N]: ",forceN);
+        // Convert raw ADC value to position in um
+        this->pos_mm = (this->raw*0.02961942 - 5.51229823);// calibration from testing
     }
 
     void LinearEncoder::set_calibration(float zero_force){

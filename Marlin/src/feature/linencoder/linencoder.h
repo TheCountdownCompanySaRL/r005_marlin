@@ -4,8 +4,12 @@
 
 #if ENABLED(LIN_ENC_FEATURE)
 
-#define LIN_ENC_PIN AUX2_03_PIN // Analog input A5
-#define LIN_ENC_ADC_CH 5
+// analog input
+#define LIN_ENC_PIN AUX2_09_PIN 
+#define LIN_ENC_ADC_CH 12
+// inverted analog input
+// #define LIN_ENC_PIN AUX2_10_PIN 
+// #define LIN_ENC_ADC_CH 11
 
 void linenco_init();                // setup pin
 

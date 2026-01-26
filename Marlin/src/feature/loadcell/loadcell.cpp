@@ -36,8 +36,8 @@
         }
    
         // Convert raw ADC value to force in Newtons
-        // map raw from 0 to 1023 to -9.81 to +9.81 N
-        forceN = (raw*19.62/1023.0)-9.81;
+        // map raw from 0 to 1023 to -29.418 to +29.418 N
+        forceN = (raw*58.836/1023.0)-29.418;
         //SERIAL_ECHOLNPGM("LC raw: ",raw," Force[N]: ",forceN);
     }
 

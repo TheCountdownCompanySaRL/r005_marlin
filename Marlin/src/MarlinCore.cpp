@@ -1673,6 +1673,10 @@ void setup() {
     SETUP_RUN(bdl.init(I2C_BD_SDA_PIN, I2C_BD_SCL_PIN, I2C_BD_DELAY));
   #endif
 
+  #ifdef CUSTOM_SERIAL
+    Serial1.begin(BAUDRATE);
+  #endif
+
   marlin_state = MF_RUNNING;
 
   SETUP_LOG("setup() completed.");

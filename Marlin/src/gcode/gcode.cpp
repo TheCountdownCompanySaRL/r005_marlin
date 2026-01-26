@@ -1055,6 +1055,10 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
         case 955: M955(); break;                                  // M955: write to log file
       #endif
 
+      #if ENABLED(LIN_ENC_FEATURE)
+        case 952: M952(); break;                                  // M952: calibrate zero offset value for linear head encoder 
+      #endif
+
       #if ENABLED(MAGNETIC_PARKING_EXTRUDER)
         case 951: M951(); break;                                  // M951: Set Magnetic Parking Extruder parameters
       #endif

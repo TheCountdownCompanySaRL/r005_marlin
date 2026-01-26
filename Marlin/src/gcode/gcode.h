@@ -315,7 +315,8 @@
  * G425 - Calibrate using a conductive object. (Requires CALIBRATION_GCODE)
  * M928 - Start SD logging: "M928 filename.gco". Stop with M29. (Requires SDSUPPORT)
  * M950 - Ask for a loadcell reading (Requires LC_FEATURE)
- * M951 - Set loadcell parameters (Requires LC_FEATURE)
+ * M951 - calibrate loadcell parameters (Requires LC_FEATURE)
+ * M952 - calibrate position sensor (requires LIN_ENC_FEATURE)
  * M955 - write to logfile (Requires LC_FEATURE)
  * 
  * 
@@ -1201,6 +1202,10 @@ private:
     static void M950();
     static void M951();
     static void M955();
+  #endif
+
+  #if ENABLED(LIN_ENC_FEATURE)
+    static void M952();
   #endif
 
   #if ENABLED(MAGNETIC_PARKING_EXTRUDER)
