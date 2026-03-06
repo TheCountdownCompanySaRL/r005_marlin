@@ -55,7 +55,7 @@ void GcodeSuite::M955() {
     snprintf(buffer, sizeof(buffer),"%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",tbuf,pidxbuf, xbuf, ybuf, zbuf, ebuf, posbuf,posrawbuf, tnbuf, cbuf, t2buf,servbuf, feedbuf);
      #ifdef CUSTOM_SERIAL
      if (parser.seen('R')){ // ask for RPI image
-        snprintf(rpibuf,sizeof(rpibuf),"$T%sP%sX%sY%sZ%sO%sC%sT%s\n",tbuf,pidxbuf,xbuf,ybuf,zbuf,posbuf,cbuf,t2buf);
+        snprintf(rpibuf,sizeof(rpibuf),"$T%sP%sX%sY%sZ%sO%sC%sT%sE%sN%sA%sB%sC%s\n",tbuf,pidxbuf,xbuf,ybuf,zbuf,posbuf,cbuf,t2buf,ebuf,tnbuf,"0.0","0.0","0.0");
         Serial1.println(rpibuf);
      }
      #endif

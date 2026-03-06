@@ -9,9 +9,9 @@
 
  void GcodeSuite::M950() {
    char buffer[50],cloadbuf[10],tloadbuf[10],hposbuf[10];
-   dtostrf(compSensor.getForce(),6,2,cloadbuf);
-   dtostrf(tensSensor.getForce(),6,2,tloadbuf);
-   dtostrf(head_encoder.getPos_mm(),6,3,hposbuf);
+   dtostrf(compSensor.getForce(),-5,2,cloadbuf);
+   dtostrf(tensSensor.getForce(),-5,2,tloadbuf);
+   dtostrf(head_encoder.getPos_mm(),-5,2,hposbuf);
 
    sprintf(buffer,"$C%sT%sP%s",cloadbuf,tloadbuf,hposbuf);
    SERIAL_ECHOLN(buffer);
